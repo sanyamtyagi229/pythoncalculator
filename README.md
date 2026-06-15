@@ -1,198 +1,59 @@
-// package.json
-{
-  "name": "calculator-app",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  }
-}
-// src/index.js
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
+from colorama import Fore, Style, init
+init(autoreset=True)
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
-// src/App.js
-import React from "react";
-import Calculator from "./Calculator";
+def logo():
+    print(Fore.CYAN + """
+   _____________________
+   |  _________________  |
+   | | Python Calc     | |
+   | |_________________| |
+   |  ___ ___ ___   ___  |
+   | | 7 | 8 | 9 | | + | |
+   | |___|___|___| |___| |
+   | | 4 | 5 | 6 | | - | |
+   | |___|___|___| |___| |
+   | | 1 | 2 | 3 | | * | |
+   | |___|___|___| |___| |
+   | | . | 0 | = | | / | |
+   | |___|___|___| |___| |
+   |_____________________|
+    """ + Style.RESET_ALL)
 
-function App() {
-  return (
-    <div>
-      <h1 style={{ textAlign: "center", color: "#333" }}>React Calculator</h1>
-      <Calculator />
-    </div>
-  );
-}
-// src/Calculator.js
-import React, { useState } from "react";
-import "./Calculator.css";
+def add(n1,n2): return n1+n2
+def sub(n1,n2): return n1-n2
+def mul(n1,n2): return n1*n2
+def div(n1,n2): return n1/n2
 
-function Calculator() {
-  const [input, setInput] = useState("");
+operations = {"+": add, "-": sub, "*": mul, "/": div}
 
-  const handleClick = (value) => {
-    setInput(input + value);
-  };
+def calculator():
+    logo()
+    num1 = float(input(Fore.YELLOW + "Enter the first number: " + Style.RESET_ALL))
+    should_accumulate = True
 
-  const clearInput = () => {
-    setInput("");
-  };
+    while should_accumulate:
+        print(Fore.GREEN + "Available operations:" + Style.RESET_ALL)
+        for symbol in operations: print(symbol)
 
-  const calculate = () => {
-    try {
-      setInput(eval(input).toString()); // ⚠️ eval is fine for demo
-    } catch {
-      setInput("Error");
-    }
-  };
+        operation_symbol = input(Fore.CYAN + "Pick an operation: " + Style.RESET_ALL)
+        num2 = float(input(Fore.YELLOW + "Enter the next number: " + Style.RESET_ALL))
 
-  return (
-    <div className="calculator">
-      <div className="display">{input || "0"}</div>
-      <div className="buttons">
-        <button onClick={clearInput} className="clear">C</button>
-        <button onClick={() => handleClick("/")}>÷</button>
-        <button onClick={() => handleClick("*")}>×</button>
-        <button onClick={() => handleClick("-")}>−</button>
+        answer = operations[operation_symbol](num1, num2)
+        print(Fore.MAGENTA + f"{num1} {operation_symbol} {num2} = {answer}" + Style.RESET_ALL)
 
-        <button onClick={() => handleClick("7")}>7</button>
-        <button onClick={() => handleClick("8")}>8</button>
-        <button onClick={() => handleClick("9")}>9</button>
-        <button onClick={() => handleClick("+")}>+</button>
+        choice = input(Fore.BLUE + f"Type 'y' to continue with {answer}, 'n' to restart, or 'exit' to quit: " + Style.RESET_ALL).lower()
 
-        <button onClick={() => handleClick("4")}>4</button>
-        <button onClick={() => handleClick("5")}>5</button>
-        <button onClick={() => handleClick("6")}>6</button>
-        <button onClick={calculate} className="equals">=</button>
+        if choice == "y":
+            num1 = answer
+        elif choice == "n":
+            print("\n" * 20)
+            calculator()
+            return
+        elif choice == "exit":
+            should_accumulate = False
+            print(Fore.RED + "Goodbye! Thanks for using Python Calc." + Style.RESET_ALL)
+        else:
+            print(Fore.RED + "Invalid choice, exiting..." + Style.RESET_ALL)
+            should_accumulate = False
 
-        <button onClick={() => handleClick("1")}>1</button>
-        <button onClick={() => handleClick("2")}>2</button>
-        <button onClick={() => handleClick("3")}>3</button>
-        <button onClick={() => handleClick("0")} className="zero">0</button>
-        <button onClick={() => handleClick(".")}>.</button>
-      </div>
-    </div>
-  );
-}
-
-export default Calculator;
-// src/Calculator.js
-import React, { useState } from "react";
-import "./Calculator.css";
-
-function Calculator() {
-  const [input, setInput] = useState("");
-
-  const handleClick = (value) => {
-    setInput(input + value);
-  };
-
-  const clearInput = () => {
-    setInput("");
-  };
-
-  const calculate = () => {
-    try {
-      setInput(eval(input).toString()); // ⚠️ eval is fine for demo
-    } catch {
-      setInput("Error");
-    }
-  };
-
-  return (
-    <div className="calculator">
-      <div className="display">{input || "0"}</div>
-      <div className="buttons">
-        <button onClick={clearInput} className="clear">C</button>
-        <button onClick={() => handleClick("/")}>÷</button>
-        <button onClick={() => handleClick("*")}>×</button>
-        <button onClick={() => handleClick("-")}>−</button>
-
-        <button onClick={() => handleClick("7")}>7</button>
-        <button onClick={() => handleClick("8")}>8</button>
-        <button onClick={() => handleClick("9")}>9</button>
-        <button onClick={() => handleClick("+")}>+</button>
-
-        <button onClick={() => handleClick("4")}>4</button>
-        <button onClick={() => handleClick("5")}>5</button>
-        <button onClick={() => handleClick("6")}>6</button>
-        <button onClick={calculate} className="equals">=</button>
-
-        <button onClick={() => handleClick("1")}>1</button>
-        <button onClick={() => handleClick("2")}>2</button>
-        <button onClick={() => handleClick("3")}>3</button>
-        <button onClick={() => handleClick("0")} className="zero">0</button>
-        <button onClick={() => handleClick(".")}>.</button>
-      </div>
-    </div>
-  );
-}
-
-export default Calculator;
-/* src/Calculator.css */
-.calculator {
-  width: 260px;
-  margin: 50px auto;
-  padding: 20px;
-  background: #222;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-.display {
-  background: #000;
-  color: #0f0;
-  font-size: 2em;
-  padding: 10px;
-  margin-bottom: 15px;
-  text-align: right;
-  border-radius: 6px;
-  min-height: 40px;
-}
-
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-button {
-  height: 50px;
-  font-size: 1.2em;
-  border: none;
-  border-radius: 8px;
-  background: #444;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-button:hover {
-  background: #666;
-}
-
-.clear {
-  background: #d9534f;
-}
-
-.equals {
-  background: #5cb85c;
-}
-
-.zero {
-  grid-column: span 2;
-}
-
-
-export default App;
+calculator()
